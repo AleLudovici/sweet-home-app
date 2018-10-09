@@ -7,7 +7,7 @@
   "info" : {
     "version" : "1.0.0",
     "title" : "SweetHome app expenses",
-    "description" : "The API to interact with sweet home app expenses"
+    "description" : "The API to interact with sweet home app expenses."
   },
   "components" : {
     "schemas" : {
@@ -17,25 +17,21 @@
           "id" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "The expense ID",
-            "example" : 11
+            "description" : "The expense ID"
           },
           "date" : {
             "type" : "string",
             "format" : "date",
-            "description" : "The day of the expense",
-            "example" : "2018-08-11"
+            "description" : "The day of the expense"
           },
           "amount" : {
             "type" : "number",
             "format" : "double",
-            "description" : "How much was the expense",
-            "example" : 10.25
+            "description" : "How much was the expense"
           },
           "currency" : {
             "type" : "string",
-            "description" : "The currency of the expense",
-            "example" : "£"
+            "description" : "The currency of the expense"
           },
           "author" : {
             "$ref" : "#/components/schemas/author"
@@ -51,18 +47,15 @@
           "id" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "The user ID correspondent to the author of the expense",
-            "example" : 1
+            "description" : "The user ID correspondent to the author of the expense"
           },
           "name" : {
             "type" : "string",
-            "description" : "The name of the author of the expense",
-            "example" : "foo"
+            "description" : "The name of the author of the expense"
           },
           "lastname" : {
             "type" : "string",
-            "description" : "The last name of the author of the expense",
-            "example" : "bar"
+            "description" : "The last name of the author of the expense"
           }
         }
       },
@@ -71,14 +64,12 @@
         "properties" : {
           "name" : {
             "type" : "string",
-            "description" : "The name of the shop/business",
-            "example" : "The Bakery"
+            "description" : "The name of the shop/business"
           },
           "description" : {
             "type" : "string",
             "nullable" : true,
-            "description" : "What did you buy",
-            "example" : "Bread and croissant"
+            "description" : "What did you buy"
           }
         }
       },
@@ -87,13 +78,11 @@
         "properties" : {
           "code" : {
             "type" : "string",
-            "description" : "The error code.",
-            "example" : "4xx"
+            "description" : "The error code."
           },
           "message" : {
             "type" : "string",
-            "description" : "The error message.",
-            "example" : "There was an error"
+            "description" : "The error message."
           }
         },
         "required" : [ "code", "message" ]
