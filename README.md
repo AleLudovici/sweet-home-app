@@ -1,2 +1,3 @@
-# sweet-home-api
-API specs for the SweetHome App
+# sweet-home-app
+
+My personal project for an app to control home expenses.
