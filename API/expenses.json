@@ -68,7 +68,6 @@
           },
           "description" : {
             "type" : "string",
-            "nullable" : true,
             "description" : "What did you buy"
           }
         }
