@@ -2,7 +2,4 @@
 
 set -e
 
-aws apigateway import-rest-api \
-    --endpointConfigurationTypes 'EDGE' \
-    --fail-on-warnings \
-    --body $1
+aws apigateway import-rest-api --fail-on-warnings --body file://$1
