@@ -11,6 +11,17 @@
   },
   "components" : {
     "schemas" : {
+      "expenses" : {
+        "type" : "object",
+        "properties" : {
+          "expenses" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/expense"
+            }
+          }
+        }
+      },
       "expense" : {
         "type" : "object",
         "properties" : {
@@ -184,15 +195,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "expenses" : {
-                      "type" : "array",
-                      "items" : {
-                        "$ref" : "#/components/schemas/expense"
-                      }
-                    }
-                  }
+                  "$ref" : "#/components/schemas/expenses"
                 }
               }
             }
