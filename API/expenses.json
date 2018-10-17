@@ -44,15 +44,15 @@
             "type" : "string",
             "description" : "The currency of the expense"
           },
-          "author" : {
-            "$ref" : "#/components/schemas/author"
+          "user" : {
+            "$ref" : "#/components/schemas/user"
           },
           "location" : {
             "$ref" : "#/components/schemas/location"
           }
         }
       },
-      "author" : {
+      "user" : {
         "type" : "object",
         "properties" : {
           "id" : {
@@ -64,7 +64,7 @@
             "type" : "string",
             "description" : "The name of the author of the expense"
           },
-          "lastname" : {
+          "last_name" : {
             "type" : "string",
             "description" : "The last name of the author of the expense"
           }
