@@ -7,6 +7,7 @@ from decimal import Decimal
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+
 def put(event, context):
     try:
         dynamodb = boto3.resource('dynamodb')
@@ -26,7 +27,8 @@ def put(event, context):
                     'name': event['location']['name'],
                     'description': event['location']['description']
                 }
-            }
+            },
+            ConditionExpression='attribute_not_exists(expense_id)'
         )
         return {
             "status_code": 201
@@ -35,6 +37,13 @@ def put(event, context):
     except ClientError as error:
         logger.error("Unexpected error: %s", error, exc_info=True)
 
-        return {
-            "status_code": 500
-        }
+        if error.response['Error']['Code'] == 'ConditionalCheckFailedException':
+            return {
+                "status_code": 404,
+                "reason": 'An expense with the same ID already exists'
+            }
+        else:
+            return {
+                "status_code": error.response['ResponseMetadata']['HTTPStatusCode'],
+                "reason": error.response['Error']['Message']
+            }
