@@ -1,0 +1,4 @@
+# in requirements/requirements.in
+
+moto
+pytest
