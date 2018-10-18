@@ -1,14 +1,14 @@
-# test_handler.py
+# put_expense_handler_tests.py
 
 import boto3
 from moto import mock_dynamodb2
-from src.handler import put
+from src.put_expense_handler import put_expense_handler
 
 
 @mock_dynamodb2
 def test_handler_adds_expense_in_dynamodb():
     set_up_dynamodb()
-    put(api_gateway_object_created_event(), None)
+    put_expense_handler(api_gateway_object_created_event(), None)
     table = boto3.resource('dynamodb').Table('expenses')
     item = table.get_item(Key={'expense_id': 0})['Item']
     expected = api_gateway_object_created_event()
@@ -22,16 +22,18 @@ def test_handler_adds_expense_in_dynamodb():
     assert item['location']['name'] == expected['location']['name']
     assert item['location']['description'] == expected['location']['description']
 
+
 @mock_dynamodb2
 def test_handler_when_adds_expense_in_dynamodb_succeed_returns_201():
     set_up_dynamodb()
-    response = put(api_gateway_object_created_event(), None)
+    response = put_expense_handler(api_gateway_object_created_event(), None)
     assert response == {'status_code': 201}
 
 
 def test_handler_when_throws_an_exception_returns_400():
-    response = put(api_gateway_object_created_event(), None)
+    response = put_expense_handler(api_gateway_object_created_event(), None)
     assert response['status_code'] == 400
+
 
 @mock_dynamodb2
 def test_handler_returns_404_when_expense_already_exists():
@@ -43,8 +45,8 @@ def test_handler_returns_404_when_expense_already_exists():
                 "reason": 'An expense with the same ID already exists'
             }
 
-    actual_positive = put(api_gateway_object_created_event(), None)
-    actual_negative = put(api_gateway_object_created_event(), None)
+    actual_positive = put_expense_handler(api_gateway_object_created_event(), None)
+    actual_negative = put_expense_handler(api_gateway_object_created_event(), None)
     assert actual_positive == expected_positive and actual_negative == expected_negative
 
 
