@@ -1,4 +1,4 @@
-# put_expense_handler.py
+# handler.py
 import boto3
 import logging
 from botocore.exceptions import ClientError
@@ -8,7 +8,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-def put_expense_handler(event, context):
+def create_expense(event, context):
     try:
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table('expenses')
