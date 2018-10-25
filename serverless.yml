@@ -1,8 +1,7 @@
-service: sweet-home-app # NOTE: update this with your service name
+plugins:
+  - serverless-dynamodb-local
 
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
-# frameworkVersion: "=X.X.X"
+service: sweet-home-app
 
 provider:
   name: aws
@@ -17,7 +16,7 @@ region: eu-west-2
 
 functions:
   create_expense:
-    handler: Lambdas/handler.create_expense
+    handler: Lambdas/src/handler.create_expense
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -52,14 +51,19 @@ functions:
 #    environment:
 #      variable2: value2
 
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: expenses
+        AttributeDefinitions:
+          - AttributeName: expense_id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: expense_id
+            KeyType': HASH
+        ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
