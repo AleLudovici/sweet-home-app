@@ -1,6 +1,8 @@
 # put_expense_handler_tests.py
 
 import boto3
+import mock
+import os
 from moto import mock_dynamodb2
 from src.handler import create_expense
 
@@ -9,7 +11,7 @@ from src.handler import create_expense
 def test_handler_adds_expense_in_dynamodb():
     set_up_dynamodb()
     create_expense(api_gateway_object_created_event(), None)
-    table = boto3.resource('dynamodb').Table('expenses')
+    table = boto3.resource('dynamodb').Table(os.environ['tableName'])
     item = table.get_item(Key={'expense_id': 0})['Item']
     expected = api_gateway_object_created_event()
     assert item['expense_id'] == expected['id']
@@ -51,6 +53,8 @@ def test_handler_returns_404_when_expense_already_exists():
 
 
 def set_up_dynamodb():
+    table_name = mock.patch.dict(os.environ, {'tableName': 'testTable'})
+    table_name.start()
     client = boto3.client('dynamodb')
     client.create_table(
         AttributeDefinitions=[
@@ -59,7 +63,7 @@ def set_up_dynamodb():
                 'AttributeType': 'N'
             }
         ],
-        TableName='expenses',
+        TableName=os.environ['tableName'],
         KeySchema=[
             {
                 'AttributeName': 'expense_id',
@@ -74,7 +78,6 @@ def set_up_dynamodb():
 
 
 def api_gateway_object_created_event():
-    # NOTE: truncated event object shown here
     return {
         "id": 0,
         "date": "2018-16-10",

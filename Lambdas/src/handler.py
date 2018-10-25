@@ -1,6 +1,7 @@
 # handler.py
 import boto3
 import logging
+import os
 from botocore.exceptions import ClientError
 from decimal import Decimal
 
@@ -11,7 +12,7 @@ logger.setLevel(logging.INFO)
 def create_expense(event, context):
     try:
         dynamodb = boto3.resource('dynamodb')
-        table = dynamodb.Table('expenses')
+        table = dynamodb.Table(os.environ['tableName'])
         table.put_item(
             Item={
                 'expense_id': event['id'],
