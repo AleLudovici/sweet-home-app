@@ -1,0 +1,14 @@
+Resources:
+  expensesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.tableName}
+      AttributeDefinitions:
+        - AttributeName: expense_id
+          AttributeType: N
+      KeySchema:
+        - AttributeName: expense_id
+          KeyType: HASH
+      ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}

@@ -1,69 +1,29 @@
-plugins:
-  - serverless-dynamodb-local
-
 service: sweet-home-app
 
 provider:
   name: aws
   runtime: python3.6
+  stage: dev
+  region: eu-west-2
+  environment:
+    tableName: ${self:custom.tableName}
 
-stage: dev
-region: eu-west-2
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  tableName: ${self:custom.stage}-expenses
+  tableThroughputs:
+    prod: 5
+    default: 1
+  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
 
 functions:
   create_expense:
     handler: Lambdas/src/handler.create_expense
-
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
-#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
-#      - cloudwatchEvent:
-#          event:
-#            source:
-#              - "aws.ec2"
-#            detail-type:
-#              - "EC2 Instance State-change Notification"
-#            detail:
-#              state:
-#                - pending
-#      - cloudwatchLog: '/aws/lambda/hello'
-#      - cognitoUserPool:
-#          pool: MyUserPool
-#          trigger: PreSignUp
-
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
-
-
+    events:
+      - http:
+          path: expenses
+          method: post
+  
 resources:
-  Resources:
-    usersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: expenses
-        AttributeDefinitions:
-          - AttributeName: expense_id
-            AttributeType: N
-        KeySchema:
-          - AttributeName: expense_id
-            KeyType: HASH
-        ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
+  # DynamoDB
+  - ${file(resources/dynamodb-table.yml)}
