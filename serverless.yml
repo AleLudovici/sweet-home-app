@@ -63,7 +63,7 @@ resources:
             AttributeType: N
         KeySchema:
           - AttributeName: expense_id
-            KeyType': HASH
+            KeyType: HASH
         ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
