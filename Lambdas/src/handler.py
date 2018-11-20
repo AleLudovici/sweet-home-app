@@ -34,7 +34,7 @@ def create_expense(event, context):
             ConditionExpression='attribute_not_exists(expense_id)'
         )
         return {
-            "status_code": 201
+            "statusCode": 201,
         }
 
     except ClientError as error:
@@ -42,11 +42,11 @@ def create_expense(event, context):
 
         if error.response['Error']['Code'] == 'ConditionalCheckFailedException':
             return {
-                "status_code": 404,
-                "reason": 'An expense with the same ID already exists'
+                "statusCode": 404,
+                "body": 'An expense with the same ID already exists'
             }
         else:
             return {
-                "status_code": error.response['ResponseMetadata']['HTTPStatusCode'],
-                "reason": error.response['Error']['Message']
+                "statusCode": error.response['ResponseMetadata']['HTTPStatusCode'],
+                "body": error.response['Error']['Message']
             }

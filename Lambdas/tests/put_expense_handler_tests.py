@@ -30,22 +30,22 @@ def test_handler_adds_expense_in_dynamodb():
 def test_handler_when_adds_expense_in_dynamodb_succeed_returns_201():
     set_up_dynamodb()
     response = create_expense(api_gateway_object_created_event(), None)
-    assert response == {'status_code': 201}
+    assert response == {'statusCode': 201}
 
 
 def test_handler_when_throws_an_exception_returns_400():
     response = create_expense(api_gateway_object_created_event(), None)
-    assert response['status_code'] == 400
+    assert response['statusCode'] == 400
 
 
 @mock_dynamodb2
 def test_handler_returns_404_when_expense_already_exists():
     set_up_dynamodb()
 
-    expected_positive = {"status_code": 201}
+    expected_positive = {"statusCode": 201}
     expected_negative = {
-                "status_code": 404,
-                "reason": 'An expense with the same ID already exists'
+                "statusCode": 404,
+                "body": 'An expense with the same ID already exists'
             }
 
     actual_positive = create_expense(api_gateway_object_created_event(), None)
