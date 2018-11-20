@@ -3,6 +3,7 @@
 import boto3
 import mock
 import os
+import json
 from moto import mock_dynamodb2
 from src.handler import create_expense
 
@@ -13,7 +14,7 @@ def test_handler_adds_expense_in_dynamodb():
     create_expense(api_gateway_object_created_event(), None)
     table = boto3.resource('dynamodb').Table(os.environ['tableName'])
     item = table.get_item(Key={'expense_id': 0})['Item']
-    expected = api_gateway_object_created_event()
+    expected = json.loads(api_gateway_object_created_event()['body'])
     assert item['expense_id'] == expected['id']
     assert item['date'] == expected['date']
     assert item['amount'] == expected['amount']
@@ -78,18 +79,6 @@ def set_up_dynamodb():
 
 
 def api_gateway_object_created_event():
-    return {
-        "id": 0,
-        "date": "2018-16-10",
-        "amount": 10.5,
-        "currency": "£",
-        "user": {
-            "id": 0,
-            "name": "Alessandro",
-            "last_name": "Ludovici"
-        },
-        "location": {
-            "name": "Bakery",
-            "description": "bread"
-        }
-    }
+    event = open('test_lambda_event.json').read()
+    test_json = json.loads(event)
+    return test_json

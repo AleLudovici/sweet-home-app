@@ -2,6 +2,7 @@
 import boto3
 import logging
 import os
+import json
 from botocore.exceptions import ClientError
 from decimal import Decimal
 
@@ -13,20 +14,21 @@ def create_expense(event, context):
     try:
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table(os.environ['tableName'])
+        expense = json.loads(event['body'])
         table.put_item(
             Item={
-                'expense_id': event['id'],
-                'date': event['date'],
-                'amount': Decimal(event['amount']),
-                'currency': event['currency'],
+                'expense_id': expense['id'],
+                'date': expense['date'],
+                'amount': Decimal(expense['amount']),
+                'currency': expense['currency'],
                 'user': {
-                    'user_id': event['user']['id'],
-                    'name': event['user']['name'],
-                    'last_name': event['user']['last_name']
+                    'user_id': expense['user']['id'],
+                    'name': expense['user']['name'],
+                    'last_name': expense['user']['last_name']
                 },
                 'location': {
-                    'name': event['location']['name'],
-                    'description': event['location']['description']
+                    'name': expense['location']['name'],
+                    'description': expense['location']['description']
                 }
             },
             ConditionExpression='attribute_not_exists(expense_id)'
